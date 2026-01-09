@@ -1,0 +1,27 @@
+{
+    "name": "scms-backend",
+    "version": "1.0.0",
+    "description": "Student Career Management System - Backend API",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node --watch server.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "csv-parser": "^3.2.0",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "json2csv": "^6.0.0-alpha.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.0.3",
+        "multer": "^2.0.2",
+        "nodemailer": "^7.0.12"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
