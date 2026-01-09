@@ -1,5 +1,6 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import NotificationPanel from '../ui/NotificationPanel';
 import {
     LayoutDashboard, User, Briefcase, FileText,
     LogOut, Menu, X, ChevronRight, Award,
@@ -110,16 +111,17 @@ const Layout = ({ isAdmin = false, isEmployer = false }) => {
                             </div>
                         </div>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center justify-between px-2">
+                            <NotificationPanel />
                             <button
                                 onClick={toggleDarkMode}
-                                className="flex-1 btn btn-ghost flex items-center justify-center gap-2"
+                                className="btn btn-ghost flex items-center justify-center p-2"
                             >
                                 {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                             </button>
                             <button
                                 onClick={handleLogout}
-                                className="flex-1 btn btn-ghost text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center justify-center gap-2"
+                                className="btn btn-ghost text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center justify-center p-2"
                             >
                                 <LogOut className="w-4 h-4" />
                             </button>
@@ -141,12 +143,15 @@ const Layout = ({ isAdmin = false, isEmployer = false }) => {
                     <div className="flex items-center gap-2">
                         <img src="/logo-primary.png" alt="ZONAVI" className="h-6 w-auto" />
                     </div>
-                    <button
-                        onClick={toggleDarkMode}
-                        className="p-2 rounded-lg hover:bg-soft-200 dark:hover:bg-navy-600"
-                    >
-                        {darkMode ? <Sun className="w-5 h-5 text-soft-300" /> : <Moon className="w-5 h-5 text-navy-600" />}
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <NotificationPanel />
+                        <button
+                            onClick={toggleDarkMode}
+                            className="p-2 rounded-lg hover:bg-soft-200 dark:hover:bg-navy-600"
+                        >
+                            {darkMode ? <Sun className="w-5 h-5 text-soft-300" /> : <Moon className="w-5 h-5 text-navy-600" />}
+                        </button>
+                    </div>
                 </header>
 
                 {/* Page Content */}

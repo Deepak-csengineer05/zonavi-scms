@@ -2,6 +2,7 @@ import Company from '../models/Company.js';
 import JobPosting from '../models/JobPosting.js';
 import JobApplication from '../models/JobApplication.js';
 import User from '../models/User.js';
+import Notification from '../models/Notification.js';
 
 // @desc    Register employer with company details
 // @route   POST /api/employer/register
@@ -247,6 +248,17 @@ export const updateApplicationStatus = async (req, res) => {
 
         application.status = status;
         await application.save();
+
+        // Create notification for the student
+        const notificationMessage = `Your application for ${application.job.position} at ${application.job.company.companyName} has been updated to: ${status.toUpperCase()}.`;
+
+        await Notification.create({
+            user: application.student, // The student ID
+            title: 'Application Update',
+            message: notificationMessage,
+            type: ['accepted', 'shortlisted', 'offered'].includes(status) ? 'success' : status === 'rejected' ? 'error' : 'info',
+            link: '/jobs'
+        });
 
         const populatedApplication = await JobApplication.findById(application._id)
             .populate('student', 'name email year branch cgpa')

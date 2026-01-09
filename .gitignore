@@ -43,3 +43,5 @@ Thumbs.db
 # Optional: Ignore uploaded files if they are local-only test uploads
 # backend/uploads/*
 # !backend/uploads/.gitkeep
+
+ZONAVI_Competitive_Roadmap.md
