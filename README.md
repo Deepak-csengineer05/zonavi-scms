@@ -91,4 +91,4 @@ See `DEPLOYMENT_GUIDE.md` in the repo for detailed instructions on setting envir
 *   [Fix] **PWA Support**: Installable on mobile devices.
 
 ---
-Built with ❤️ by [Your Name].
+Built with ❤️ by Deepak Saravanakumar.
