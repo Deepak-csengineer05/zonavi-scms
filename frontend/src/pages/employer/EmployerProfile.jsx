@@ -230,7 +230,7 @@ const EmployerProfile = () => {
                                 value={profile.contactPhone}
                                 onChange={handleChange}
                                 className="input"
-                                placeholder="+91 1234567890"
+                                placeholder="+91 9876543210"
                             />
                         </div>
                     </div>

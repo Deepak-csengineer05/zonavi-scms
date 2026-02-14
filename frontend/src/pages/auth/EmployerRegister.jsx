@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { employerAPI, authAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
-import { Building2, Mail, Lock, User, Globe, MapPin, Users, Calendar, Eye, EyeOff, Phone, Briefcase } from 'lucide-react';
+import { Building2, Mail, Lock, User, Globe, MapPin, Users, Calendar, Eye, EyeOff, Phone, Briefcase, ChevronDown, X, Check, Search } from 'lucide-react';
 import TermsModal from '../../components/ui/TermsModal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const EmployerRegister = () => {
     const [scrollOpacity, setScrollOpacity] = useState(1);
@@ -40,6 +41,8 @@ const EmployerRegister = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showTerms, setShowTerms] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [activeModal, setActiveModal] = useState(null); // 'industry' | 'size' | null
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -127,6 +130,15 @@ const EmployerRegister = () => {
         'Other'
     ];
 
+    const companySizes = [
+        { value: '1-10', label: '1-10 employees' },
+        { value: '11-50', label: '11-50 employees' },
+        { value: '51-200', label: '51-200 employees' },
+        { value: '201-500', label: '201-500 employees' },
+        { value: '501-1000', label: '501-1000 employees' },
+        { value: '1000+', label: '1000+ employees' }
+    ];
+
     const currentYear = new Date().getFullYear();
 
     return (
@@ -159,7 +171,7 @@ const EmployerRegister = () => {
             {/* Scrollable Content */}
             <div className="relative z-10 min-h-screen flex flex-col items-center pt-44 pb-12 px-4">
                 {/* Register Card */}
-                <div className="w-full max-w-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 animate-slide-up">
+                <div className="w-full max-w-xl bg-white/0 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 animate-slide-up">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Personal Information */}
                         <div>
@@ -216,37 +228,30 @@ const EmployerRegister = () => {
                                 </div>
                                 <div>
                                     <label className="label !text-gray-200">Industry *</label>
-                                    <select
-                                        value={formData.industry}
-                                        onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500"
-                                        required
+                                    <div
+                                        onClick={() => setActiveModal('industry')}
+                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 cursor-pointer flex items-center justify-between"
                                     >
-                                        <option className="text-navy-900" value="">Select industry</option>
-                                        {industries.map((industry) => (
-                                            <option className="text-navy-900" key={industry} value={industry}>{industry}</option>
-                                        ))}
-                                    </select>
+                                        <span className={formData.industry ? 'text-white' : 'text-gray-400'}>
+                                            {formData.industry || 'Select industry'}
+                                        </span>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <div>
                                     <label className="label !text-gray-200">Company Size *</label>
-                                    <div className="relative">
+                                    <div
+                                        onClick={() => setActiveModal('size')}
+                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 cursor-pointer flex items-center justify-between pl-10 relative"
+                                    >
                                         <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                        <select
-                                            value={formData.size}
-                                            onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                                            className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 pl-10"
-                                        >
-                                            <option className="text-navy-900" value="1-10">1-10 employees</option>
-                                            <option className="text-navy-900" value="11-50">11-50 employees</option>
-                                            <option className="text-navy-900" value="51-200">51-200 employees</option>
-                                            <option className="text-navy-900" value="201-500">201-500 employees</option>
-                                            <option className="text-navy-900" value="501-1000">501-1000 employees</option>
-                                            <option className="text-navy-900" value="1000+">1000+ employees</option>
-                                        </select>
+                                        <span className={formData.size ? 'text-white' : 'text-gray-400'}>
+                                            {companySizes.find(s => s.value === formData.size)?.label || formData.size || 'Select size'}
+                                        </span>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
                                     </div>
                                 </div>
                                 <div>
@@ -257,7 +262,7 @@ const EmployerRegister = () => {
                                             type="number"
                                             value={formData.foundedYear}
                                             onChange={(e) => setFormData({ ...formData, foundedYear: e.target.value })}
-                                            min="1800"
+                                            min="1950"
                                             max={currentYear}
                                             className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 pl-10"
                                             placeholder={currentYear.toString()}
@@ -276,7 +281,7 @@ const EmployerRegister = () => {
                                             value={formData.location}
                                             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                                             className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 pl-10"
-                                            placeholder="City, Country"
+                                            placeholder="City"
                                             required
                                         />
                                     </div>
@@ -306,7 +311,7 @@ const EmployerRegister = () => {
                                             value={formData.contactPhone}
                                             onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
                                             className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 pl-10"
-                                            placeholder="+91 1234567890"
+                                            placeholder="+91 9876543210"
                                         />
                                     </div>
                                 </div>
@@ -414,7 +419,34 @@ const EmployerRegister = () => {
                         type="employer"
                     />
 
-                    <div className="border-t border-white/10">
+                    {/* Industry Selection Modal */}
+                    <SelectionModal
+                        isOpen={activeModal === 'industry'}
+                        onClose={() => setActiveModal(null)}
+                        title="Select Industry"
+                        options={industries}
+                        value={formData.industry}
+                        onSelect={(val) => {
+                            setFormData({ ...formData, industry: val });
+                            setActiveModal(null);
+                        }}
+                    />
+
+                    {/* Company Size Selection Modal */}
+                    <SelectionModal
+                        isOpen={activeModal === 'size'}
+                        onClose={() => setActiveModal(null)}
+                        title="Select Company Size"
+                        options={companySizes}
+                        value={formData.size}
+                        onSelect={(val) => {
+                            setFormData({ ...formData, size: val });
+                            setActiveModal(null);
+                        }}
+                    />
+
+
+                    <div className="border-t border-white/10 mt-6 pt-4">
                         <div className="text-center text-sm text-gray-400">
                             Already have an account?{' '}
                             <Link to="/login" className="text-teal-400 hover:text-teal-300 font-medium">
@@ -431,6 +463,83 @@ const EmployerRegister = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const SelectionModal = ({ isOpen, onClose, title, options, value, onSelect }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    if (!isOpen) return null;
+
+    const filteredOptions = options.filter(opt => {
+        const label = typeof opt === 'string' ? opt : opt.label;
+        return label.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="bg-white dark:bg-navy-800 w-full max-w-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-soft-200 dark:border-navy-700 max-h-[70vh]"
+                    >
+                        <div className="p-4 border-b border-soft-200 dark:border-navy-700 flex items-center justify-between bg-soft-50 dark:bg-navy-900">
+                            <h3 className="font-semibold text-navy-900 dark:text-white">{title}</h3>
+                            <button onClick={onClose} className="p-1 hover:bg-soft-200 dark:hover:bg-navy-800 rounded-full text-soft-500">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="p-3 border-b border-soft-200 dark:border-navy-700">
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-soft-400 w-4 h-4" />
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    className="w-full pl-9 pr-4 py-2 rounded-lg bg-soft-50 dark:bg-navy-900 border-none outline-none text-sm text-navy-900 dark:text-white"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-2 scrollbar-hide">
+                            {filteredOptions.length > 0 ? (
+                                <div className="space-y-1">
+                                    {filteredOptions.map((opt, idx) => {
+                                        const optValue = typeof opt === 'string' ? opt : opt.value;
+                                        const optLabel = typeof opt === 'string' ? opt : opt.label;
+                                        const isSelected = value === optValue;
+
+                                        return (
+                                            <button
+                                                key={idx}
+                                                onClick={() => onSelect(optValue)}
+                                                className={`w-full text-left px-4 py-3 rounded-lg flex items-center justify-between transition-colors ${isSelected
+                                                        ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 font-medium'
+                                                        : 'hover:bg-soft-50 dark:hover:bg-navy-700 text-navy-700 dark:text-gray-200'
+                                                    }`}
+                                            >
+                                                <span>{optLabel}</span>
+                                                {isSelected && <Check size={16} />}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="p-8 text-center text-soft-500">
+                                    No options found
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
     );
 };
 

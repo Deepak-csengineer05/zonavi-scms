@@ -37,7 +37,7 @@ const ForgotPassword = () => {
                 </div>
 
                 {/* Card */}
-                <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
+                <div className="w-full max-w-md bg-white/0 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
                     {success ? (
                         <div className="text-center">
                             <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">

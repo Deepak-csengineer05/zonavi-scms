@@ -18,7 +18,7 @@ const RegisterChoice = () => {
                     {/* Student Registration */}
                     <Link
                         to="/register/student"
-                        className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+                        className="group bg-white/4 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8 hover:bg-white/0 transition-all duration-300 hover:scale-105"
                     >
                         <div className="flex flex-col items-center text-center">
                             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-navy-500 to-teal-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -58,7 +58,7 @@ const RegisterChoice = () => {
                     {/* Employer Registration */}
                     <Link
                         to="/register/employer"
-                        className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+                        className="group bg-white/4 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8 hover:bg-white/0 transition-all duration-300 hover:scale-105"
                     >
                         <div className="flex flex-col items-center text-center">
                             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">

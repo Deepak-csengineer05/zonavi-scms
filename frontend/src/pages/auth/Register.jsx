@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-hot-toast';
-import { GraduationCap, Mail, Lock, User, BookOpen, Eye, EyeOff, Phone, Github, Linkedin, Code2, Shield } from 'lucide-react';
+import { GraduationCap, Mail, Lock, User, BookOpen, Eye, EyeOff, Phone, Github, Linkedin, Code2, Shield, ChevronDown, Check, X, Search } from 'lucide-react';
 import TermsModal from '../../components/ui/TermsModal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Register = () => {
     const [scrollOpacity, setScrollOpacity] = useState(1);
@@ -38,6 +39,8 @@ const Register = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showTerms, setShowTerms] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [activeModal, setActiveModal] = useState(null); // 'branch' | 'year'
+
     const { register } = useAuth();
     const navigate = useNavigate();
 
@@ -98,6 +101,13 @@ const Register = () => {
         'Other'
     ];
 
+    const years = [
+        { value: '1', label: '1st Year' },
+        { value: '2', label: '2nd Year' },
+        { value: '3', label: '3rd Year' },
+        { value: '4', label: '4th Year' }
+    ];
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-navy-500 via-navy-600 to-teal-600 relative overflow-x-hidden">
             {/* Fixed Background Elements */}
@@ -128,7 +138,7 @@ const Register = () => {
             {/* Scrollable Content */}
             <div className="relative z-10 min-h-screen flex flex-col items-center pt-44 pb-12 px-4">
                 {/* Register Card */}
-                <div className="w-full max-w-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 animate-slide-up">
+                <div className="w-full max-w-xl bg-white/0 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 animate-slide-up">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Personal Information Section */}
                         <div>
@@ -195,7 +205,7 @@ const Register = () => {
                                             value={formData.phone}
                                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                             className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 pl-10"
-                                            placeholder="+91 1234567890"
+                                            placeholder="+91 9876543210"
                                         />
                                     </div>
                                 </div>
@@ -211,30 +221,27 @@ const Register = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="md:col-span-2">
                                     <label className="label !text-gray-200">Branch/Program *</label>
-                                    <select
-                                        value={formData.branch}
-                                        onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
-                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500"
-                                        required
+                                    <div
+                                        onClick={() => setActiveModal('branch')}
+                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 cursor-pointer flex items-center justify-between"
                                     >
-                                        <option className="text-navy-900" value="">Select your branch</option>
-                                        {branches.map((branch) => (
-                                            <option className="text-navy-900" key={branch} value={branch}>{branch}</option>
-                                        ))}
-                                    </select>
+                                        <span className={formData.branch ? 'text-white' : 'text-gray-400'}>
+                                            {formData.branch || 'Select your branch'}
+                                        </span>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="label !text-gray-200">Current Year *</label>
-                                    <select
-                                        value={formData.year}
-                                        onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500"
+                                    <div
+                                        onClick={() => setActiveModal('year')}
+                                        className="input !bg-white/5 !border-white/10 !text-white !placeholder-gray-400 focus:!ring-teal-500 cursor-pointer flex items-center justify-between"
                                     >
-                                        <option className="text-navy-900" value="1">1st Year</option>
-                                        <option className="text-navy-900" value="2">2nd Year</option>
-                                        <option className="text-navy-900" value="3">3rd Year</option>
-                                        <option className="text-navy-900" value="4">4th Year</option>
-                                    </select>
+                                        <span className={formData.year ? 'text-white' : 'text-gray-400'}>
+                                            {years.find(y => y.value.toString() === formData.year.toString())?.label || formData.year || 'Select Year'}
+                                        </span>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </div>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -388,6 +395,32 @@ const Register = () => {
                         type="student"
                     />
 
+                    {/* Branch Selection Modal */}
+                    <SelectionModal
+                        isOpen={activeModal === 'branch'}
+                        onClose={() => setActiveModal(null)}
+                        title="Select Branch"
+                        options={branches}
+                        value={formData.branch}
+                        onSelect={(val) => {
+                            setFormData({ ...formData, branch: val });
+                            setActiveModal(null);
+                        }}
+                    />
+
+                    {/* Year Selection Modal */}
+                    <SelectionModal
+                        isOpen={activeModal === 'year'}
+                        onClose={() => setActiveModal(null)}
+                        title="Select Year"
+                        options={years}
+                        value={formData.year}
+                        onSelect={(val) => {
+                            setFormData({ ...formData, year: val });
+                            setActiveModal(null);
+                        }}
+                    />
+
                     <div className="border-t border-white/10">
                         <div className="text-center text-sm text-gray-400">
                             Already have an account?{' '}
@@ -405,6 +438,84 @@ const Register = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+// Reusable SelectionModal Component (Same as EmployerRegister)
+const SelectionModal = ({ isOpen, onClose, title, options, value, onSelect }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    if (!isOpen) return null;
+
+    const filteredOptions = options.filter(opt => {
+        const label = typeof opt === 'string' ? opt : opt.label;
+        return label.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="bg-white dark:bg-navy-800 w-full max-w-md rounded-2xl shadow-xl overflow-hidden flex flex-col border border-soft-200 dark:border-navy-700 max-h-[70vh]"
+                    >
+                        <div className="p-4 border-b border-soft-200 dark:border-navy-700 flex items-center justify-between bg-soft-50 dark:bg-navy-900">
+                            <h3 className="font-semibold text-navy-900 dark:text-white">{title}</h3>
+                            <button onClick={onClose} className="p-1 hover:bg-soft-200 dark:hover:bg-navy-800 rounded-full text-soft-500">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="p-3 border-b border-soft-200 dark:border-navy-700">
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-soft-400 w-4 h-4" />
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    className="w-full pl-9 pr-4 py-2 rounded-lg bg-soft-50 dark:bg-navy-900 border-none outline-none text-sm text-navy-900 dark:text-white"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-2 scrollbar-hide">
+                            {filteredOptions.length > 0 ? (
+                                <div className="space-y-1">
+                                    {filteredOptions.map((opt, idx) => {
+                                        const optValue = typeof opt === 'string' ? opt : opt.value;
+                                        const optLabel = typeof opt === 'string' ? opt : opt.label;
+                                        const isSelected = value.toString() === optValue.toString();
+
+                                        return (
+                                            <button
+                                                key={idx}
+                                                onClick={() => onSelect(optValue)}
+                                                className={`w-full text-left px-4 py-3 rounded-lg flex items-center justify-between transition-colors ${isSelected
+                                                        ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 font-medium'
+                                                        : 'hover:bg-soft-50 dark:hover:bg-navy-700 text-navy-700 dark:text-gray-200'
+                                                    }`}
+                                            >
+                                                <span>{optLabel}</span>
+                                                {isSelected && <Check size={16} />}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="p-8 text-center text-soft-500">
+                                    No options found
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
     );
 };
 

@@ -38,7 +38,7 @@ const Login = () => {
                 </div>
 
                 {/* Login Card */}
-                <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
+                <div className="w-full max-w-md bg-white/0 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
