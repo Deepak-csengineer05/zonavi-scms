@@ -10,9 +10,27 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-4 py-2.5 md:py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
+  /* Button Size Variants */
+  .btn-sm {
+    @apply px-3 py-2 md:py-1.5 text-sm;
+  }
+  
+  .btn-md {
+    @apply px-4 py-2.5 md:py-2 text-base;
+  }
+  
+  .btn-lg {
+    @apply px-6 py-3.5 md:py-3 text-lg;
+  }
+  
+  .btn-icon {
+    @apply p-2.5 aspect-square;
+  }
+  
+  /* Button Color Variants */
   .btn-primary {
     @apply bg-navy-500 text-white hover:bg-navy-600 focus:ring-navy-400 dark:bg-teal-500 dark:hover:bg-teal-600;
   }
@@ -42,11 +60,36 @@
   }
   
   .input {
-    @apply w-full px-4 py-2.5 rounded-lg border border-soft-400 bg-white dark:bg-navy-600 dark:border-navy-500 text-navy-800 dark:text-soft-200 placeholder-soft-600 dark:placeholder-soft-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 md:py-2.5 rounded-lg border border-soft-400 bg-white dark:bg-navy-600 dark:border-navy-500 text-navy-800 dark:text-soft-200 placeholder-soft-600 dark:placeholder-soft-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200;
+  }
+  
+  /* Input Validation States */
+  .input-error {
+    @apply border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500;
+  }
+  
+  .input-success {
+    @apply border-green-500 focus:ring-green-500 focus:border-green-500 dark:border-green-500;
+  }
+  
+  .input:disabled {
+    @apply opacity-50 cursor-not-allowed bg-soft-200 dark:bg-navy-800;
   }
   
   .label {
     @apply block text-sm font-medium text-navy-600 dark:text-soft-400 mb-1.5;
+  }
+  
+  .label-error {
+    @apply text-red-600 dark:text-red-400;
+  }
+  
+  .error-message {
+    @apply text-sm text-red-600 dark:text-red-400 mt-1;
+  }
+  
+  .success-message {
+    @apply text-sm text-green-600 dark:text-green-400 mt-1;
   }
   
   .badge {
@@ -128,4 +171,36 @@
     transform: translateX(100%);
     opacity: 0;
   }
+}
+
+/* Landing Page Animations */
+.animate-fade-in-down {
+  animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(61, 139, 139, 0.3);
+  color: inherit;
+}
+
+::-moz-selection {
+  background-color: rgba(61, 139, 139, 0.3);
+  color: inherit;
 }

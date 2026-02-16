@@ -3,6 +3,13 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Layout
 import Layout from './components/layout/Layout';
+import PublicLayout from './components/layout/PublicLayout';
+
+// Public Pages
+import LandingPage from './pages/public/LandingPage';
+import AboutPage from './pages/public/AboutPage';
+import FAQPage from './pages/public/FAQPage';
+import ContactPage from './pages/public/ContactPage';
 
 // Auth Pages
 import Login from './pages/auth/Login';
@@ -89,9 +96,19 @@ const PublicRoute = ({ children }) => {
 };
 
 function AppRoutes() {
+    const { isAuthenticated } = useAuth();
+
     return (
         <Routes>
-            {/* Public Routes */}
+            {/* Public Landing Pages */}
+            <Route element={<PublicLayout />}>
+                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/faq" element={<FAQPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+            </Route>
+
+            {/* Auth Routes */}
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><RegisterChoice /></PublicRoute>} />
             <Route path="/register/student" element={<PublicRoute><Register /></PublicRoute>} />
@@ -100,9 +117,10 @@ function AppRoutes() {
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 
             {/* Student Protected Routes */}
+            <Route path="/dashboard" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+                <Route index element={<Dashboard />} />
+            </Route>
             <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route index element={<Navigate to="/dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="projects" element={<Projects />} />
                 <Route path="internships" element={<Internships />} />
@@ -124,7 +142,7 @@ function AppRoutes() {
                 <Route path="imports" element={<AdminImport />} />
             </Route>
 
-            {/* Employer Protected Routes */}
+            {/* Employer Protected RoisAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/
             <Route path="/employer" element={<ProtectedRoute employerOnly><Layout isEmployer /></ProtectedRoute>}>
                 <Route index element={<EmployerDashboard />} />
                 <Route path="profile" element={<EmployerProfile />} />

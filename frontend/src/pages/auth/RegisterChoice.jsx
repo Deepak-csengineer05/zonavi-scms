@@ -97,7 +97,7 @@ const RegisterChoice = () => {
                 </div>
 
                 {/* Login Link */}
-                <div className="text-center mt-8">
+                <div className="text-center mt-8 pb-8">
                     <p className="text-soft-200">
                         Already have an account?{' '}
                         <Link to="/login" className="text-white font-semibold hover:underline">

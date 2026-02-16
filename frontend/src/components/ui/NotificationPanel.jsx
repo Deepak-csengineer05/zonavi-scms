@@ -86,7 +86,7 @@ const NotificationPanel = () => {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-80 md:w-96 bg-white dark:bg-navy-800 rounded-lg shadow-xl border border-soft-200 dark:border-navy-600 z-50 overflow-hidden animate-fade-in-down">
+                <div className="absolute left-full ml-2 mt-2 w-80 md:w-96 bg-white dark:bg-navy-800 rounded-lg shadow-xl border border-soft-200 dark:border-navy-600 z-50 overflow-hidden animate-fade-in-down">
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-soft-200 dark:border-navy-600 flex justify-between items-center bg-soft-50 dark:bg-navy-900/50">
                         <h3 className="font-semibold text-navy-800 dark:text-white">Notifications</h3>
